@@ -11,8 +11,12 @@ export default function TimerChallenge({ title, targetTime }) {
 
   if (remainingTime <= 0) {
     clearInterval(timer.current);
-    setRemainingTime(targetTime * 1000);
+
     modal.current.open();
+  }
+
+  function handleReset() {
+    setRemainingTime(targetTime * 1000);
   }
 
   function handleStart() {
@@ -28,14 +32,19 @@ export default function TimerChallenge({ title, targetTime }) {
 
   return (
     <>
-      <ResultModal result="lost" targetTime={targetTime} ref={modal} />
+      <ResultModal
+        remainingTime={remainingTime}
+        targetTime={targetTime}
+        ref={modal}
+        onReset={handleReset}
+      />
 
       <section className="challenge">
         <h2>{title}</h2>
         <p className="challeng-time">{targetTime} second(s)</p>
         <p>
           <button onClick={isTimeActive ? handleStop : handleStart}>
-            {timeStarted ? "Stop" : "Start"} Challenge
+            {isTimeActive ? "Stop" : "Start"} Challenge
           </button>
         </p>
         <p className={isTimeActive ? "active" : undefined}>
